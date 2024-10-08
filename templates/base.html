@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erp</title>
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css" rel="stylesheet" />
+
+    <style>
+        * {
+            transition: .3s ease-in-out;
+        }
+
+        .navbar .avatar {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary mb-4">
+        <div class="container">
+            <button data-mdb-collapse-init class="navbar-toggler" type="button"
+                data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse align-items-center" id="navbarSupportedContent">
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <h4 class="my-1">ERP Clone</h4>
+                </a>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+                <i class="fas fa-moon text-warning" style="font-size: 20px; user-select: none;" id="theme-toggle"></i>
+
+                {% if request.user.is_authenticated %}
+
+                <div class="dropdown">
+                    <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
+                        id="navbarDropdownMenuAvatar" role="button" aria-expanded="false">
+                        <div class="avatar bg-primary text-light">{{ request.user.username|slice:":1"|title }}</div>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuAvatar">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'settings' %}">Settings</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+
+                {% else %}
+
+                <div class="links d-flex gap-2">
+                    <a href="{% url 'login' %}">Login</a>
+                    <a href="{% url 'register' %}">Register</a>
+
+                </div>
+
+                {% endif %}
+
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mb-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div class="modal fade" id="create-course-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="POST">{% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Yangi kurs qo'shish</h5>
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {% for field in form %}
+                        <div class="form-outline mb-3" data-mdb-input-init>
+                            {{ field }}
+
+                            <label class="form-label" for="{{ field.auto_id }}">{{ field.label }}</label>
+                        </div>
+
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <div type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">
+                            Close
+                        </div>
+                        <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isLight = localStorage.getItem('theme') !== 'dark';
+
+        const toggleButton = document.getElementById('theme-toggle');
+
+        if (!isLight) {
+            document.body.setAttribute("data-mdb-theme", "dark");
+            toggleButton.classList.add("fa-moon");
+            toggleButton.classList.remove("fa-sun");
+        } else {
+            document.body.setAttribute("data-mdb-theme", "light");
+            toggleButton.classList.add("fa-sun");
+            toggleButton.classList.remove("fa-moon");
+        }
+
+        toggleButton.addEventListener('click', () => {
+            if (isLight) {
+                document.body.setAttribute("data-mdb-theme", "dark");
+                localStorage.setItem('theme', 'dark');
+                toggleButton.classList.add("fa-moon");
+                toggleButton.classList.remove("fa-sun");
+            } else {
+                document.body.setAttribute("data-mdb-theme", "light");
+                localStorage.setItem('theme', 'light');
+                toggleButton.classList.add("fa-sun");
+                toggleButton.classList.remove("fa-moon");
+            }
+
+            isLight = !isLight;
+        });
+    </script>
+
+
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
+
+</body>
+
+</html>

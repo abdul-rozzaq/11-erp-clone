@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    input,
+    select {
+        width: 100%;
+        min-height: auto;
+        padding-top: .32rem;
+        padding-bottom: .32rem;
+        padding-left: .75rem;
+        padding-right: .75rem;
+        border: 1px solid #DEDEDE;
+        background: rgba(0, 0, 0, 0);
+        transition: all .2s linear;
+        border-radius: 0.25rem;
+    }
+
+
+    select[multiple] {
+        height: 200px;
+    }
+</style>
+
+<div class="d-flex mb-4 align-items-center justify-content-between">
+    <h2>{{ course.title }}</h2>
+
+    <button class="btn btn-success" data-mdb-modal-init data-mdb-target="#create-group-modal">Yangi guruh
+        ochish</button>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for group in course.groups.all %}
+    <div class="col">
+        <div class="card h-100 border shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <a href="{% url 'group' group.pk %}" class="text-decoration-none">
+                    <h4 class="card-title mb-0">{{ group.title }}</h4>
+                </a>
+
+                <div class="times fw-bold text-primary">
+                    {{ group.formatted_start_time }} - {{ group.formatted_end_time }}
+                </div>
+            </div>
+
+            <div class="card-body">
+                <p class="card-text d-flex align-items-center gap-2">
+                    <strong>O'qituvchi:</strong> {{ group.teacher.get_full_name }}
+                </p>
+                <p class="card-text d-flex align-items-center gap-2">
+                    <strong>Kunlar:</strong>
+                    {% for day in group.days.all %}
+                    <span class="badge bg-info text-light p-1">{{ day.name }}</span>
+                    {% empty %}
+                    <span class="text-muted">Kunlar belgilanmagan</span>
+                    {% endfor %}
+                </p>
+                <p class="card-text d-flex align-items-center gap-2">
+                    <strong>Holat:</strong>
+                    <span class="badge {% if group.status == 'active' %} bg-success {% else %} bg-danger {% endif %}">
+                        {{ group.get_status_display }}
+                    </span>
+                </p>
+            </div>
+
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                <span class="text-muted">{{ group.students.count }} talaba</span>
+
+                <button type="button" class="btn btn-primary" data-mdb-ripple-init>O'quvchi qo'shish</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+
+<div class="modal fade show" id="create-group-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST">{% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Yangi guruh qo'shish</h5>
+                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body">
+                        {{ form.as_p }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">
+                        Close
+                    </div>
+                    <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

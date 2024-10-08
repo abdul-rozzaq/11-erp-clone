@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <h2>👋 Hush kelibsiz, Admin {{ request.user.first_name }}</h2>
+    <button class="btn btn-primary" data-mdb-modal-init data-mdb-target="#create-course-modal">Yangi kurs
+        yaratish</button>
+</div>
+
+
+<div class="row row-cols-2 gy-4">
+    {% for course in courses %}
+    <div class="col">
+        <div class="card p-3 border h-100">
+            <a href="{% url 'course' course.pk %}">
+                <h4 class="card-title">{{ course.title }}</h4>
+            </a>
+            <div class="card-text">
+                {{ course.description|truncatewords:30 }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+
+</div>
+
+{% endblock %}

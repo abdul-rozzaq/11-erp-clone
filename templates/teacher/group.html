@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    input,
+    select {
+        width: 100%;
+        min-height: auto;
+        padding-top: .32rem;
+        padding-bottom: .32rem;
+        padding-left: .75rem;
+        padding-right: .75rem;
+        border: 1px solid #DEDEDE;
+        background: rgba(0, 0, 0, 0);
+        transition: all .2s linear;
+        border-radius: 0.25rem;
+    }
+
+
+    select[multiple] {
+        height: 200px;
+    }
+</style>
+
+<div class="d-flex mb-4 align-items-center justify-content-between">
+    <a href="{% url 'home' %}">
+        <h2>{{ group.title }}</h2>
+    </a>
+</div>
+
+
+<div class="modal fade" id="edit-group-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST">{% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Yangi guruh qo'shish</h5>
+                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body">
+                        {{ form.as_p }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">
+                        Close
+                    </div>
+                    <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="delete-group-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST">{% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Guruhni o'chirish</h5>
+                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4>Haqiqatdan ham {{ group.title }} ni o'chirmoqchimisiz?</h4>
+                </div>
+                <div class="modal-footer">
+                    <div type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">
+                        Close
+                    </div>
+                    <a href="{% url 'delete_group' group.pk %}" type="submit" class="btn btn-danger"
+                        data-mdb-ripple-init>O'chirish</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="add-student-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form method="POST">{% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">O'quvchi qo'shish</h5>
+                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4>
+                        Test rejim
+                    </h4>
+                </div>
+                <div class="modal-footer">
+                    <div type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">
+                        Close
+                    </div>
+                    <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Qo'shish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

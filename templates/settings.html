@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+
+<div class="w-25 mx-auto">
+    <h3 class="mb-4">Sozlamalar</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% for field in form %}
+
+        <div data-mdb-input-init class="form-outline mb-3">
+            {{ field }}
+
+            <label class="form-label" for="{{ field.auto_id }}">{{ field.label }}</label>
+        </div>
+
+        {% if field.errors %}
+        <div class="alert-danger ">
+            {{ field.errors }}
+        </div>
+        {% endif %}
+
+        {% endfor %}
+
+        <button data-mdb-ripple-init type="submit" class="btn btn-primary btn-block">Saqlash</button>
+    </form>
+</div>
+
+{% endblock %}

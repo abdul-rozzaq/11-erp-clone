@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="d-flex mb-2">
+    <h2>👋 Hush kelibsiz, Teacher {{ request.user.first_name }}</h2>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for group in request.user.teacher_groups.all %}
+    <div class="col">
+        <div class="card h-100 border shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <a href="{% url 'group' group.pk %}" class="text-decoration-none">
+                    <h4 class="card-title mb-0">{{ group.title }}</h4>
+                </a>
+
+                <div class="times fw-bold text-primary">
+                    {{ group.formatted_start_time }} - {{ group.formatted_end_time }}
+                </div>
+            </div>
+
+            <div class="card-body">
+                <p class="card-text d-flex align-items-center gap-2">
+                    <strong>O'qituvchi:</strong> {{ group.teacher.get_full_name }}
+                </p>
+                <p class="card-text d-flex align-items-center gap-2">
+                    <strong>Kunlar:</strong>
+                    {% for day in group.days.all %}
+                    <span class="badge bg-info text-light p-1">{{ day.name }}</span>
+                    {% empty %}
+                    <span class="text-muted">Kunlar belgilanmagan</span>
+                    {% endfor %}
+                </p>
+                <p class="card-text d-flex align-items-center gap-2">
+                    <strong>Holat:</strong>
+                    <span class="badge {% if group.status == 'active' %} bg-success {% else %} bg-danger {% endif %}">
+                        {{ group.get_status_display }}
+                    </span>
+                </p>
+            </div>
+
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                <span class="text-muted">{{ group.students.count }} talaba</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+
+{% endblock %}
